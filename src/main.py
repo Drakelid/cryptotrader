@@ -1,38 +1,28 @@
-import time
+import argparse
 import logging
-from typing import Optional
+import yaml
 
-from exchange.binance_client import BinanceClient
-from strategies.moving_average import MovingAverageStrategy
+from core.engine import TradingEngine
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 
 
-def main(symbol: str, iterations: int = 10, interval: float = 1.0) -> None:
-    client = BinanceClient()
-    strategy = MovingAverageStrategy()
+def load_config(path: str):
+    with open(path) as f:
+        return yaml.safe_load(f)
 
-    for _ in range(iterations):
-        price = client.get_ticker_price(symbol)
-        if price is None:
-            logging.warning("No price for %s", symbol)
-            time.sleep(interval)
-            continue
-        logging.info("%s price=%s", symbol, price)
-        strategy.on_price_update(symbol, price)
-        signal = strategy.generate_signal()
-        if signal:
-            logging.info("Generated signal: %s", signal)
-        time.sleep(interval)
+
+def main(config_path: str, iterations: int, interval: float):
+    config = load_config(config_path)
+    strategies = config.get("strategies", [])
+    engine = TradingEngine(strategies, interval=interval)
+    engine.run(iterations)
 
 
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Simple crypto trading skeleton")
-    parser.add_argument("symbol", help="Trading pair symbol, e.g. BTCUSDT")
-    parser.add_argument("--iterations", type=int, default=10, help="Number of price updates")
-    parser.add_argument("--interval", type=float, default=1.0, help="Delay between updates in seconds")
+    parser = argparse.ArgumentParser(description="CryptoTrader engine")
+    parser.add_argument("--config", default="config/strategies.yaml")
+    parser.add_argument("--iterations", type=int, default=10)
+    parser.add_argument("--interval", type=float, default=1.0)
     args = parser.parse_args()
-
-    main(args.symbol, args.iterations, args.interval)
+    main(args.config, args.iterations, args.interval)

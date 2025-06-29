@@ -6,7 +6,8 @@ from .base import Strategy
 class MovingAverageStrategy(Strategy):
     """Simple moving average crossover strategy."""
 
-    def __init__(self, fast_period: int = 5, slow_period: int = 20):
+    def __init__(self, symbol: str, fast_period: int = 5, slow_period: int = 20):
+        self.symbol = symbol.upper()
         self.fast_period = fast_period
         self.slow_period = slow_period
         self.fast_prices: Deque[float] = deque(maxlen=fast_period)

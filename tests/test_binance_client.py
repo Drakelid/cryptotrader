@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
-from exchange.binance_client import BinanceClient
+from data.binance.binance_client import BinanceClient
 
 
 def test_get_ticker_price():
