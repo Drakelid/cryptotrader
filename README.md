@@ -65,6 +65,18 @@ curl -X POST http://localhost:8000/autonomous -H "Content-Type: application/json
   -d '{"iterations": 10, "stop_loss": 0.02, "take_profit": 0.05, "trailing": 0.03}'
 ```
 
+Check Binance connectivity:
+
+```bash
+curl http://localhost:8000/status
+```
+
+Fetch trending tokens from CoinMarketCap:
+
+```bash
+curl http://localhost:8000/trending
+```
+
 ### Run from CLI
 
 You can still run the sample script directly:

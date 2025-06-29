@@ -24,3 +24,16 @@ def test_dashboard_endpoints():
         resp = client.post("/autonomous", json={"iterations": 1, "stop_loss": 0.02})
     assert resp.status_code == 200
     assert resp.json()["status"] == "completed"
+
+    with patch("src.data.binance.binance_client.requests.Session.get") as mock_get:
+        mock_get.return_value.raise_for_status.return_value = None
+        resp = client.get("/status")
+    assert resp.status_code == 200
+    assert "binance_ok" in resp.json()
+
+    with patch("src.data.cmc.cmc_client.requests.Session.get") as mock_cmc:
+        mock_cmc.return_value.raise_for_status.return_value = None
+        mock_cmc.return_value.json.return_value = {"data": [{"id": 1}]}
+        resp = client.get("/trending")
+    assert resp.status_code == 200
+    assert resp.json()["tokens"] == [{"id": 1}]

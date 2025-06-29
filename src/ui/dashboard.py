@@ -3,6 +3,9 @@ from typing import List
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from src.data.binance.binance_client import BinanceClient
+from src.data.cmc.cmc_client import CoinMarketCapClient
+
 from src.backtest.simulator import run_backtest as cli_run_backtest
 from src.autonomous.trader import run_autonomous as cli_run_autonomous
 from src.main import run_engine as cli_run_engine
@@ -40,6 +43,14 @@ class AutoRequest(BaseModel):
     trailing: float = 0.03
 
 
+class StatusResponse(BaseModel):
+    binance_ok: bool
+
+
+class TrendingResponse(BaseModel):
+    tokens: List[dict]
+
+
 @app.get("/")
 def read_root():
     return {"message": "CryptoTrader dashboard"}
@@ -74,3 +85,16 @@ def autonomous_endpoint(req: AutoRequest):
         trailing=req.trailing,
     )
     return {"status": "completed", "iterations": req.iterations or 0}
+
+
+@app.get("/status", response_model=StatusResponse)
+def status_endpoint():
+    client = BinanceClient()
+    return StatusResponse(binance_ok=client.ping())
+
+
+@app.get("/trending", response_model=TrendingResponse)
+def trending_endpoint(limit: int = 5):
+    cmc = CoinMarketCapClient()
+    tokens = cmc.get_trending_tokens(limit=limit)
+    return TrendingResponse(tokens=tokens)
