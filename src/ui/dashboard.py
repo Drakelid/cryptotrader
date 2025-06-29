@@ -6,7 +6,7 @@ import yaml
 
 from core.engine import TradingEngine
 from backtest.simulator import BacktestSimulator, _default_strategy
-from execution import PaperTrader
+from execution import PaperTrader, BinanceTrader
 
 app = FastAPI(title="CryptoTrader Dashboard")
 
@@ -47,7 +47,7 @@ def read_root():
 def run_engine(req: RunRequest):
     with open(req.config) as f:
         cfg = yaml.safe_load(f)
-    executor = PaperTrader() if req.paper else None
+    executor = PaperTrader() if req.paper else BinanceTrader()
     engine = TradingEngine(cfg.get("strategies", []), interval=req.interval, executor=executor)
     results = engine.run(req.iterations)
     return RunResponse(results=results)
@@ -65,7 +65,7 @@ def run_backtest(req: BacktestRequest):
 def run_autonomous(req: AutoRequest):
     with open(req.config) as f:
         cfg = yaml.safe_load(f)
-    executor = PaperTrader() if req.paper else None
+    executor = PaperTrader() if req.paper else BinanceTrader()
     engine = TradingEngine(cfg.get("strategies", []), interval=req.interval, executor=executor)
     i = 0
     while req.iterations is None or i < req.iterations:

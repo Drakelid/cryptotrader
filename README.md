@@ -15,6 +15,7 @@ architecture but only implements a handful of features.
 - Grid trading strategy
 - AI predictive strategy
 - Simple backtesting simulator
+- Binance trading executor for live orders
 - Paper trading executor
 - YAML strategy configuration in `config/strategies.yaml`
 - FastAPI dashboard for running tasks
@@ -28,6 +29,9 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+Create a `.env` file and set BINANCE_API_KEY, BINANCE_API_SECRET and CMC_API_KEY
+
 
 ### Run the Dashboard
 
@@ -78,6 +82,11 @@ Run the autonomous trader from CLI:
 
 ```bash
 python -m src.autonomous.trader --iterations 10 --paper
+```
+
+For live trading ensure BINANCE_API_KEY and BINANCE_API_SECRET are set and omit `--paper`:
+```bash
+python -m src.autonomous.trader --iterations 10
 ```
 
 Run tests with:

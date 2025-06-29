@@ -3,7 +3,7 @@ import logging
 import yaml
 
 from core.engine import TradingEngine
-from execution import PaperTrader
+from execution import PaperTrader, BinanceTrader
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 
@@ -16,7 +16,7 @@ def load_config(path: str):
 def main(config_path: str, iterations: int, interval: float, paper: bool):
     config = load_config(config_path)
     strategies = config.get("strategies", [])
-    executor = PaperTrader() if paper else None
+    executor = PaperTrader() if paper else BinanceTrader()
     engine = TradingEngine(strategies, interval=interval, executor=executor)
     engine.run(iterations)
     if executor:

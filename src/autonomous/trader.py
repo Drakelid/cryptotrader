@@ -3,22 +3,27 @@ import time
 import yaml
 
 from core.engine import TradingEngine
-from execution import PaperTrader
+from execution import PaperTrader, BinanceTrader
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 
 
-def run_autonomous(config_path: str = "config/strategies.yaml", interval: float = 1.0, paper: bool = True, iterations: int | None = None) -> None:
+def run_autonomous(
+    config_path: str = "config/strategies.yaml",
+    interval: float = 1.0,
+    paper: bool = True,
+    iterations: int | None = None,
+) -> None:
     with open(config_path) as f:
         cfg = yaml.safe_load(f)
-    executor = PaperTrader() if paper else None
+    executor = PaperTrader() if paper else BinanceTrader()
     engine = TradingEngine(cfg.get("strategies", []), interval=interval, executor=executor)
     i = 0
     while iterations is None or i < iterations:
         engine.run_once()
         i += 1
         time.sleep(interval)
-    if executor:
+    if isinstance(executor, PaperTrader):
         logging.info("Final balance: %s", executor.balance)
 
 
@@ -36,3 +41,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
