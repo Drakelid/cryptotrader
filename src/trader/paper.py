@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from .base import Trader
-from risk.base import Account
 
 
 class PaperTrader(Trader):
