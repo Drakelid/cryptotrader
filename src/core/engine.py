@@ -1,5 +1,6 @@
 import importlib
 import logging
+import time
 from typing import Any, Dict, List
 
 from data.binance.binance_client import BinanceClient
@@ -21,7 +22,9 @@ class TradingEngine:
         self.strategies = load_strategies(strategy_configs)
         self.interval = interval
 
-    def run_once(self):
+    def run_once(self) -> List[Dict[str, Any]]:
+        """Run one iteration and return generated signals."""
+        signals = []
         for strat in self.strategies:
             symbol = getattr(strat, "symbol", None)
             if not symbol:
@@ -34,9 +37,17 @@ class TradingEngine:
             signal = strat.generate_signal()
             if signal:
                 logging.info("%s generated signal: %s", strat.__class__.__name__, signal)
+                signals.append({
+                    "strategy": strat.__class__.__name__,
+                    "symbol": symbol,
+                    "signal": signal,
+                })
+        return signals
 
-    def run(self, iterations: int):
-        import time
+    def run(self, iterations: int) -> List[List[Dict[str, Any]]]:
+        """Run multiple iterations and return list of signals per iteration."""
+        all_signals: List[List[Dict[str, Any]]] = []
         for _ in range(iterations):
-            self.run_once()
+            all_signals.append(self.run_once())
             time.sleep(self.interval)
+        return all_signals

@@ -24,7 +24,25 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Run the sample script to fetch prices and generate signals:
+
+### Run the Dashboard
+
+Start the FastAPI web dashboard and trigger the engine via HTTP:
+
+```bash
+uvicorn src.ui.dashboard:app --reload
+```
+
+You can then POST to `/run` to execute the engine. For example:
+
+```bash
+curl -X POST http://localhost:8000/run -H "Content-Type: application/json" \
+  -d '{"iterations": 5, "interval": 2}'
+```
+
+### Run from CLI
+
+You can still run the sample script directly:
 
 ```bash
 python -m src.main --config config/strategies.yaml --iterations 5 --interval 2
