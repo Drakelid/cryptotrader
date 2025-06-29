@@ -35,6 +35,8 @@ class TradingEngine:
             if price is None:
                 logging.warning("No price for %s", symbol)
                 continue
+            if self.executor and hasattr(self.executor, "evaluate"):
+                self.executor.evaluate(symbol, price)
             strat.on_price_update(symbol, price)
             signal = strat.generate_signal()
             if signal:

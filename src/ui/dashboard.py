@@ -35,6 +35,9 @@ class AutoRequest(BaseModel):
     interval: float = 1.0
     paper: bool = True
     iterations: int | None = None
+    stop_loss: float = 0.02
+    take_profit: float = 0.04
+    trailing: float = 0.03
 
 
 @app.get("/")
@@ -66,5 +69,8 @@ def autonomous_endpoint(req: AutoRequest):
         interval=req.interval,
         paper=req.paper,
         iterations=req.iterations,
+        stop_loss=req.stop_loss,
+        take_profit=req.take_profit,
+        trailing=req.trailing,
     )
     return {"status": "completed", "iterations": req.iterations or 0}

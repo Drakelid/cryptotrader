@@ -17,6 +17,7 @@ architecture but only implements a handful of features.
 - Simple backtesting simulator
 - Binance trading executor for live orders
 - Paper trading executor
+- Risk management with stop-loss, take-profit and trailing stop
 - YAML strategy configuration in `config/strategies.yaml`
 - FastAPI dashboard for running tasks
 - Autonomous trading helper
@@ -61,7 +62,7 @@ Launch a simple autonomous loop:
 
 ```bash
 curl -X POST http://localhost:8000/autonomous -H "Content-Type: application/json" \
-  -d '{"iterations": 10}'
+  -d '{"iterations": 10, "stop_loss": 0.02, "take_profit": 0.05, "trailing": 0.03}'
 ```
 
 ### Run from CLI
@@ -81,7 +82,7 @@ python -m src.backtest.simulator your_prices.csv
 Run the autonomous trader from CLI:
 
 ```bash
-python -m src.autonomous.trader --iterations 10 --paper
+python -m src.autonomous.trader --iterations 10 --paper --stop-loss 0.02 --take-profit 0.05 --trailing 0.03
 ```
 
 For live trading ensure BINANCE_API_KEY and BINANCE_API_SECRET are set and omit `--paper`:
