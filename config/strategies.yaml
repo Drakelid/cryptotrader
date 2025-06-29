@@ -1,26 +1,26 @@
 strategies:
   - name: moving_average
-    module: strategies.moving_average
+    module: src.strategies.moving_average
     class: MovingAverageStrategy
     params:
       fast_period: 5
       slow_period: 20
       symbol: BTCUSDT
   - name: mean_reversion
-    module: strategies.mean_reversion
+    module: src.strategies.mean_reversion
     class: MeanReversionStrategy
     params:
       period: 20
       threshold: 0.02
       symbol: ETHUSDT
   - name: grid_trading
-    module: strategies.grid_trading
+    module: src.strategies.grid_trading
     class: GridTradingStrategy
     params:
       grid_size: 0.01
       symbol: BTCUSDT
   - name: ai_predictive
-    module: strategies.ai_predictive
+    module: src.strategies.ai_predictive
     class: AIPredictiveStrategy
     params:
       symbol: ETHUSDT

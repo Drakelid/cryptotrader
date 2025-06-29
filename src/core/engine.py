@@ -3,8 +3,8 @@ import logging
 import time
 from typing import Any, Dict, List
 
-from data.binance.binance_client import BinanceClient
-from execution import PaperTrader
+from src.data.binance.binance_client import BinanceClient
+from src.execution import PaperTrader
 
 
 def load_strategies(config: List[Dict[str, Any]]):

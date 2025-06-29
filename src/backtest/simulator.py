@@ -20,7 +20,7 @@ class BacktestSimulator:
 
 
 def _default_strategy(symbol: str):
-    from strategies.moving_average import MovingAverageStrategy
+    from src.strategies.moving_average import MovingAverageStrategy
 
     return MovingAverageStrategy(symbol)
 

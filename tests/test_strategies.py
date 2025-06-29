@@ -1,12 +1,12 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from strategies.moving_average import MovingAverageStrategy
-from strategies.mean_reversion import MeanReversionStrategy
-from strategies.grid_trading import GridTradingStrategy
-from strategies.ai_predictive import AIPredictiveStrategy
+from src.strategies.moving_average import MovingAverageStrategy
+from src.strategies.mean_reversion import MeanReversionStrategy
+from src.strategies.grid_trading import GridTradingStrategy
+from src.strategies.ai_predictive import AIPredictiveStrategy
 
 
 def test_moving_average_strategy():

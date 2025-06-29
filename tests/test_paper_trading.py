@@ -2,11 +2,11 @@ import os
 import sys
 from unittest.mock import patch
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from execution.paper import PaperTrader
-from core.engine import TradingEngine
-from strategies.base import Strategy
+from src.execution.paper import PaperTrader
+from src.core.engine import TradingEngine
+from src.strategies.base import Strategy
 
 class DummyStrategy(Strategy):
     def __init__(self):

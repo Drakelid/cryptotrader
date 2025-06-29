@@ -3,9 +3,9 @@ from typing import List
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from backtest.simulator import run_backtest as cli_run_backtest
-from autonomous.trader import run_autonomous as cli_run_autonomous
-from main import run_engine as cli_run_engine
+from src.backtest.simulator import run_backtest as cli_run_backtest
+from src.autonomous.trader import run_autonomous as cli_run_autonomous
+from src.main import run_engine as cli_run_engine
 
 app = FastAPI(title="CryptoTrader Dashboard")
 

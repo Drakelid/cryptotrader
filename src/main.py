@@ -2,8 +2,8 @@ import argparse
 import logging
 import yaml
 
-from core.engine import TradingEngine
-from execution import PaperTrader, BinanceTrader
+from src.core.engine import TradingEngine
+from src.execution import PaperTrader, BinanceTrader
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 
