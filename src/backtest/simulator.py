@@ -25,10 +25,15 @@ def _default_strategy(symbol: str):
     return MovingAverageStrategy(symbol)
 
 
-def main(csv_file: str, symbol: str = "BTCUSDT") -> None:
+def run_backtest(csv_file: str, symbol: str = "BTCUSDT"):
+    """Run the backtest and return generated signals."""
     strategy = _default_strategy(symbol)
     sim = BacktestSimulator(strategy)
-    for signal in sim.run(BacktestSimulator.load_prices(csv_file)):
+    return list(sim.run(BacktestSimulator.load_prices(csv_file)))
+
+
+def main(csv_file: str, symbol: str = "BTCUSDT") -> None:
+    for signal in run_backtest(csv_file, symbol):
         if signal:
             print(signal)
 

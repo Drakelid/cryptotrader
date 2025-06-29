@@ -13,14 +13,25 @@ def load_config(path: str):
         return yaml.safe_load(f)
 
 
-def main(config_path: str, iterations: int, interval: float, paper: bool):
+def run_engine(
+    config_path: str = "config/strategies.yaml",
+    iterations: int = 1,
+    interval: float = 1.0,
+    paper: bool = False,
+) -> list:
+    """Run the trading engine and return collected signals."""
     config = load_config(config_path)
     strategies = config.get("strategies", [])
     executor = PaperTrader() if paper else BinanceTrader()
     engine = TradingEngine(strategies, interval=interval, executor=executor)
-    engine.run(iterations)
-    if executor:
-        print("Balance:", executor.balance)
+    results = engine.run(iterations)
+    return results
+
+
+def main(config_path: str, iterations: int, interval: float, paper: bool):
+    results = run_engine(config_path, iterations, interval, paper)
+    if paper:
+        print("Results:", results)
 
 
 if __name__ == "__main__":

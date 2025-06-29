@@ -2,11 +2,10 @@ from typing import List
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-import yaml
 
-from core.engine import TradingEngine
-from backtest.simulator import BacktestSimulator, _default_strategy
-from execution import PaperTrader, BinanceTrader
+from backtest.simulator import run_backtest as cli_run_backtest
+from autonomous.trader import run_autonomous as cli_run_autonomous
+from main import run_engine as cli_run_engine
 
 app = FastAPI(title="CryptoTrader Dashboard")
 
@@ -45,30 +44,27 @@ def read_root():
 
 @app.post("/run", response_model=RunResponse)
 def run_engine(req: RunRequest):
-    with open(req.config) as f:
-        cfg = yaml.safe_load(f)
-    executor = PaperTrader() if req.paper else BinanceTrader()
-    engine = TradingEngine(cfg.get("strategies", []), interval=req.interval, executor=executor)
-    results = engine.run(req.iterations)
+    results = cli_run_engine(
+        config_path=req.config,
+        iterations=req.iterations,
+        interval=req.interval,
+        paper=req.paper,
+    )
     return RunResponse(results=results)
 
 
 @app.post("/backtest", response_model=BacktestResponse)
-def run_backtest(req: BacktestRequest):
-    strategy = _default_strategy(req.symbol)
-    sim = BacktestSimulator(strategy)
-    signals = list(sim.run(BacktestSimulator.load_prices(req.csv_file)))
+def backtest_endpoint(req: BacktestRequest):
+    signals = cli_run_backtest(req.csv_file, req.symbol)
     return BacktestResponse(signals=signals)
 
 
 @app.post("/autonomous")
-def run_autonomous(req: AutoRequest):
-    with open(req.config) as f:
-        cfg = yaml.safe_load(f)
-    executor = PaperTrader() if req.paper else BinanceTrader()
-    engine = TradingEngine(cfg.get("strategies", []), interval=req.interval, executor=executor)
-    i = 0
-    while req.iterations is None or i < req.iterations:
-        engine.run_once()
-        i += 1
-    return {"status": "completed", "iterations": i}
+def autonomous_endpoint(req: AutoRequest):
+    cli_run_autonomous(
+        config_path=req.config,
+        interval=req.interval,
+        paper=req.paper,
+        iterations=req.iterations,
+    )
+    return {"status": "completed", "iterations": req.iterations or 0}

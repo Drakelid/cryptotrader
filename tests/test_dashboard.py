@@ -20,7 +20,7 @@ def test_dashboard_endpoints():
     assert resp.status_code == 200
     assert "signals" in resp.json()
 
-    with patch("core.engine.time.sleep", return_value=None):
+    with patch("autonomous.trader.time.sleep", return_value=None):
         resp = client.post("/autonomous", json={"iterations": 1})
     assert resp.status_code == 200
     assert resp.json()["status"] == "completed"
