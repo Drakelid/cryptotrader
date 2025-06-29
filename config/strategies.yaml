@@ -6,3 +6,10 @@ strategies:
       fast_period: 5
       slow_period: 20
       symbol: BTCUSDT
+  - name: mean_reversion
+    module: strategies.mean_reversion
+    class: MeanReversionStrategy
+    params:
+      period: 20
+      threshold: 0.02
+      symbol: ETHUSDT

@@ -11,6 +11,8 @@ architecture but only implements a handful of features.
 - CoinMarketCap API client (`CoinMarketCapClient`)
 - Configurable strategy engine (`core.engine.TradingEngine`)
 - Example moving average crossover strategy
+- Mean reversion strategy
+- Simple backtesting simulator
 - YAML strategy configuration in `config/strategies.yaml`
 - Pytest based unit test
 
@@ -26,6 +28,12 @@ Run the sample script to fetch prices and generate signals:
 
 ```bash
 python -m src.main --config config/strategies.yaml --iterations 5 --interval 2
+```
+
+Backtest a strategy with a CSV file of prices:
+
+```bash
+python -m src.backtest.simulator your_prices.csv
 ```
 
 Run tests with:
