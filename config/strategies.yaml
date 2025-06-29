@@ -13,3 +13,14 @@ strategies:
       period: 20
       threshold: 0.02
       symbol: ETHUSDT
+  - name: grid_trading
+    module: strategies.grid_trading
+    class: GridTradingStrategy
+    params:
+      grid_size: 0.01
+      symbol: BTCUSDT
+  - name: ai_predictive
+    module: strategies.ai_predictive
+    class: AIPredictiveStrategy
+    params:
+      symbol: ETHUSDT
