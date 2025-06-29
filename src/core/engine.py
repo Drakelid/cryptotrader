@@ -4,6 +4,7 @@ import time
 from typing import Any, Dict, List
 
 from data.binance.binance_client import BinanceClient
+from execution import PaperTrader
 
 
 def load_strategies(config: List[Dict[str, Any]]):
@@ -17,10 +18,11 @@ def load_strategies(config: List[Dict[str, Any]]):
 
 
 class TradingEngine:
-    def __init__(self, strategy_configs: List[Dict[str, Any]], interval: float = 1.0):
+    def __init__(self, strategy_configs: List[Dict[str, Any]], interval: float = 1.0, executor: PaperTrader | None = None):
         self.client = BinanceClient()
         self.strategies = load_strategies(strategy_configs)
         self.interval = interval
+        self.executor = executor
 
     def run_once(self) -> List[Dict[str, Any]]:
         """Run one iteration and return generated signals."""
@@ -37,6 +39,8 @@ class TradingEngine:
             signal = strat.generate_signal()
             if signal:
                 logging.info("%s generated signal: %s", strat.__class__.__name__, signal)
+                if self.executor and signal in ("buy", "sell"):
+                    self.executor.execute(symbol, signal, price)
                 signals.append({
                     "strategy": strat.__class__.__name__,
                     "symbol": symbol,

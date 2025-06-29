@@ -13,6 +13,7 @@ architecture but only implements a handful of features.
 - Example moving average crossover strategy
 - Mean reversion strategy
 - Simple backtesting simulator
+- Paper trading executor
 - YAML strategy configuration in `config/strategies.yaml`
 - Pytest based unit test
 
@@ -45,8 +46,10 @@ curl -X POST http://localhost:8000/run -H "Content-Type: application/json" \
 You can still run the sample script directly:
 
 ```bash
-python -m src.main --config config/strategies.yaml --iterations 5 --interval 2
+python -m src.main --config config/strategies.yaml --iterations 5 --interval 2 --paper
 ```
+
+The `--paper` flag enables paper trading so no real funds are used.
 
 Backtest a strategy with a CSV file of prices:
 
