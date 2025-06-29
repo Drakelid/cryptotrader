@@ -1,0 +1,7 @@
+python-binance
+requests
+pandas
+PyYAML
+fastapi
+uvicorn
+httpx
